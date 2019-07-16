@@ -3,6 +3,23 @@ import './App.css';
 import { BrowserRouter, Route, Link} from 'react-router-dom'
 
 //for index page
+class IndexPage extends React.Component{
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return(
+      <div className="App">
+          <button><Link to="/add_post/">Add Post</Link></button>
+          <button>Remove Post</button>
+          <Posts></Posts>
+      </div>
+    )
+  }
+}
+
+// for router
 class App extends React.Component{
   constructor(props){
     super(props);
@@ -12,9 +29,7 @@ class App extends React.Component{
     return(
       <div className="App">
         <BrowserRouter>
-          <button><Link to="/add_post/">Add Post</Link></button>
-          <button>Remove Post</button>
-          <Route exact path="/" component={App}/>
+          <Route exact path="/" component={IndexPage}/>
           <Route path="/add_post/" component={NewPost}/>
         </BrowserRouter>
       </div>
@@ -26,17 +41,56 @@ class App extends React.Component{
 class NewPost extends React.Component{
   constructor(props){
     super(props);
+    this.state={
+      titleValue:'',
+      contentValue:'Please input Content.'
+    }
+    this.submitPost = this.submitPost.bind(this);
+    this.uploadPhoto = this.uploadPhoto.bind(this);
 
+  }
+
+  submitPost(event){
+    //save post and redirect
+    event.preventDefault();
+  }
+
+  uploadPhoto(){
+    //upload photo here
   }
 
   render(){
     return(
       <div>
-        <p>It's new post</p>
+        <form onSubmit={this.submitPost}>
+          <p>Title:</p>
+          <input type="text" id="titleBox" />
+          <p>Content:</p>
+          <input type="text" id="contentBox" value={this.state.value} />
+          <br/>
+          <button onClick={this.uploadPhoto}>upload</button>
+          <input type='submit' value='submit'/>
+        </form>
       </div>
     )
   }
 }
+
+// for single post show
+class Post extends React.Component{
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return(
+      <div>
+        <p>I'm a single post</p>
+      </div>
+    )
+  }
+}
+ 
 
 // for posts div
 class Posts extends React.Component{
@@ -47,7 +101,7 @@ class Posts extends React.Component{
   render(){
     return(
       <div>
-
+        <Post></Post>
       </div>
     )
   }
