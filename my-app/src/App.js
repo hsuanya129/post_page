@@ -52,6 +52,7 @@ class NewPost extends React.Component{
 
   submitPost(event){
     //save post and redirect
+    
     event.preventDefault();
   }
 
@@ -66,9 +67,9 @@ class NewPost extends React.Component{
           <p>Title:</p>
           <input type="text" id="titleBox" />
           <p>Content:</p>
-          <input type="text" id="contentBox" value={this.state.value} />
+          <input type="text" id="contentBox" />
           <br/>
-          <button onClick={this.uploadPhoto}>upload</button>
+          <input id='files' type="file" name="pic" accept="image/*" />
           <input type='submit' value='submit'/>
         </form>
       </div>
