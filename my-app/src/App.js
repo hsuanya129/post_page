@@ -1,26 +1,57 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Route, Link} from 'react-router-dom'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+//for index page
+class App extends React.Component{
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return(
+      <div className="App">
+        <BrowserRouter>
+          <button><Link to="/add_post/">Add Post</Link></button>
+          <button>Remove Post</button>
+          <Route exact path="/" component={App}/>
+          <Route path="/add_post/" component={NewPost}/>
+        </BrowserRouter>
+      </div>
+    )
+  }
 }
+
+//for new_post page
+class NewPost extends React.Component{
+  constructor(props){
+    super(props);
+
+  }
+
+  render(){
+    return(
+      <div>
+        <p>It's new post</p>
+      </div>
+    )
+  }
+}
+
+// for posts div
+class Posts extends React.Component{
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return(
+      <div>
+
+      </div>
+    )
+  }
+}
+
 
 export default App;
