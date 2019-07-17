@@ -23,7 +23,7 @@ class IndexPage extends React.Component{
       <div className="App">
           <button onClick={this.toPostPage}>Add Post</button>
           <button>Remove Post</button>
-          <Posts />
+          {/* <Posts /> */}
       </div>
     )
   }
@@ -41,7 +41,7 @@ class App extends React.Component{
         <BrowserRouter>
           <Route exact path="/" component={IndexPage}/>
           <Route path="/add_post" component={NewPost}/>
-          
+          <Route path="/post" component={Posts}/>
         </BrowserRouter>
       </div>
     )
@@ -58,14 +58,16 @@ class NewPost extends React.Component{
 
   }
 
-  submitPost(event){
+  submitPost(){
     //save post and redirect
-    const title = document.getElementById('titleBox');
-    const content = document.getElementById('contentBox');
-    this.props.history.push('/')
-    
 
+      const title=document.getElementById('titleBox').value
+      const content=document.getElementById('contentBox').value
 
+    this.props.history.push({
+      pathname:"/post",
+      state:{ title:{title},content:{content}}
+    })
   }
 
   uploadPhoto(){
@@ -82,7 +84,7 @@ class NewPost extends React.Component{
           <br/>
           <input id='file-upload' type="file" name="pic" accept="image/*"  />
           <button id="submitPost" onClick={this.submitPost} >submit</button>
-          <Route path="/post" component={Posts} />
+          <Route path="/post" render={props=> <Posts {...props} title={this.state.title} content={this.state.content} />} />
       </div>
     )
   }
@@ -117,27 +119,38 @@ class Posts extends React.Component{
     this.state={
       itemList:[
         {
-          title:'myTitle',
-        content:'myContent'
+          title:(""),
+        content:("Please input Content.")
         }
       ]
     }
-  }
 
-  addItem(){
-    const newList = this.state.itemList.concat({title:this.props.title,
-      content:this.props.content})
+    
+  } 
+
+  shouldComponentUpdate(){
+    console.log(this.props.history.location.state.title.title)
+    const newTitle = this.props.history.location.state.title.title
+    const newContent = this.props.history.location.state.content.content
+    const newList = this.state.itemList.concat({title:newTitle,
+      content:newContent})
     this.setState={
       itemList:newList
     }
+    console.log(newList)
   }
 
   render(){
+
     const itemList = this.state.itemList.map((item,index)=><Post key={index} title={item.title} content={item.content} />)
+    console.log(this.state.itemList)
+    
+
+
     return(
       <div>
         {itemList}
-        
+        <Redirect to="/" />
       </div>
     )
   }
