@@ -1,160 +1,164 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter, Route, Link, history,Redirect} from 'react-router-dom'
+import { BrowserRouter, Route, Link, history, Redirect } from 'react-router-dom'
 
-//for index page
-class IndexPage extends React.Component{
-  constructor(props){
+
+// parent component
+class App extends React.Component {
+  constructor(props) {
     super(props);
-    this.toPostPage = this.toPostPage.bind(this);
-    this.toRemovePost = this.toRemovePost.bind(this);
+
+    //for saving data
+    this.state = {
+      itemList: [
+        // {
+        //   title: "",
+        //   content: ""
+        // }
+      ]
+    }
+    //binding method with this
+    this.addPost = this.addPost.bind(this)
+    this.removePost = this.removePost.bind(this)
   }
 
-  toPostPage(){
-    this.props.history.push('/add_post')
+
+  //write some callbacks function here
+  addPost(title, content) {
+    const newTitle = title
+    const newContent = content
+    const newList = this.state.itemList.concat({
+      title: newTitle,
+      content: newContent
+    })
+    this.setState({
+      itemList: newList
+    })
   }
 
-  toRemovePost(){
-
+  removePost(){
+    const postLength = this.state.itemList.length
+    const newList =this.state.itemList.splice(0,postLength-1)
+    this.setState({
+      itemList:newList
+    })
   }
 
-  render(){
-    return(
-      <div className="App">
-          <button onClick={this.toPostPage}>Add Post</button>
-          <button>Remove Post</button>
-          {/* <Posts /> */}
-      </div>
-    )
-  }
-}
-
-// for router
-class App extends React.Component{
-  constructor(props){
-    super(props);
-  }
-
-  render(){
-    return(
+  render() {
+    console.log(this.state.itemList)
+    return (
       <div className="App">
         <BrowserRouter>
-          <Route exact path="/" component={IndexPage}/>
-          <Route path="/add_post" component={NewPost}/>
-          <Route path="/post" component={Posts}/>
+          <Route exact path="/" render={(props) => <IndexPage {...props} removePost={this.removePost} itemList={this.state.itemList} />} />
+          <Route path="/add_post" render={(props) => <NewPost {...props} addPost={this.addPost} />} />
         </BrowserRouter>
       </div>
     )
   }
 }
 
-//for new_post page
-class NewPost extends React.Component{
-  constructor(props){
+//for index page, child of App
+class IndexPage extends React.Component {
+  constructor(props) {
     super(props);
-    
+    this.toPostPage = this.toPostPage.bind(this);
+    this.toRemovePost = this.toRemovePost.bind(this);
+  }
+
+  toPostPage() {
+    this.props.history.push('/add_post')
+  }
+
+  toRemovePost() {
+    this.props.removePost()
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <button onClick={this.toPostPage}>Add Post</button>
+        <button onClick={this.toRemovePost}>Remove Post</button>
+        <Posts itemList={this.props.itemList} />
+      </div>
+    )
+  }
+}
+
+
+
+//for add_post page, child of App
+class NewPost extends React.Component {
+  constructor(props) {
+    super(props);
+
     this.submitPost = this.submitPost.bind(this);
     this.uploadPhoto = this.uploadPhoto.bind(this);
 
   }
 
-  submitPost(){
-    //save post and redirect
+  submitPost() {
+    //save post 
+    const title = document.getElementById('titleBox').value
+    const content = document.getElementById('contentBox').value
 
-      const title=document.getElementById('titleBox').value
-      const content=document.getElementById('contentBox').value
-
-    this.props.history.push({
-      pathname:"/post",
-      state:{ title:{title},content:{content}}
-    })
+    this.props.addPost(title, content);
+    this.props.history.push('/')
   }
 
-  uploadPhoto(){
+  uploadPhoto() {
     //upload photo here
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <div>
-          <p>Title:</p>
-          <input type="text" id="titleBox" />
-          <p>Content:</p>
-          <textarea id="contentBox" defaultValue="Please input Content."/>
-          <br/>
-          <input id='file-upload' type="file" name="pic" accept="image/*"  />
-          <button id="submitPost" onClick={this.submitPost} >submit</button>
-          <Route path="/post" render={props=> <Posts {...props} title={this.state.title} content={this.state.content} />} />
+        <p>Title:</p>
+        <input type="text" id="titleBox" />
+        <p>Content:</p>
+        <textarea id="contentBox" defaultValue="Please input Content." />
+        <br />
+        <input id='file-upload' type="file" name="pic" accept="image/*" />
+        <button id="submitPost" onClick={this.submitPost} >submit</button>
       </div>
     )
   }
 }
 
-// for single post show
-class Post extends React.Component{
-  constructor(props){
+
+
+
+//for showing all posts, map and render every post component, child of index
+class Posts extends React.Component {
+  constructor(props) {
     super(props);
-  
   }
 
-  render(){
-    console.log(`${this.props.title} ${this.props.content}`)
-    return(
-      <div>
-        <p>{this.props.title}</p>
-        <p>{this.props.content}</p>
-        
-      </div>
-      
-    )
-  }
-}
- 
-
-//for posts div, single source of truth, 
-//state store all posts' contents, while props store every single new post's content
-class Posts extends React.Component{
-  constructor(props){
-    super(props);
-    this.state={
-      itemList:[
-        {
-          title:(""),
-        content:("Please input Content.")
-        }
-      ]
-    }
-
+  render() {
+    const itemList = this.props.itemList.map((item, index) => <Post key={index} title={item.title} content={item.content} />)
     
-  } 
-
-  shouldComponentUpdate(){
-    console.log(this.props.history.location.state.title.title)
-    const newTitle = this.props.history.location.state.title.title
-    const newContent = this.props.history.location.state.content.content
-    const newList = this.state.itemList.concat({title:newTitle,
-      content:newContent})
-    this.setState={
-      itemList:newList
-    }
-    console.log(newList)
-  }
-
-  render(){
-
-    const itemList = this.state.itemList.map((item,index)=><Post key={index} title={item.title} content={item.content} />)
-    console.log(this.state.itemList)
-    
-
-
-    return(
+    return (
       <div>
         {itemList}
-        <Redirect to="/" />
+      </div>
+    )
+  }
+
+}
+
+// for single post show, child of Posts
+class Post extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className='post'>
+        <p>{this.props.title}</p>
+        <p>{this.props.content}</p>
       </div>
     )
   }
 }
-
 
 export default App;
