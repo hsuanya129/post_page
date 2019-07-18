@@ -12,8 +12,10 @@ class App extends React.Component {
     this.state = {
       itemList: [
         // {
+        //   id:""
         //   title: "",
-        //   content: ""
+        //   content: "",
+        //   picture:""
         // }
       ]
     }
@@ -22,14 +24,32 @@ class App extends React.Component {
     this.removePost = this.removePost.bind(this)
   }
 
+  addPost(title, content, picture) {
+    //TODO it didnt generate unique id
+    let id;
+    const items = this.state.itemList
+    if (items.length==0){
+      id=0;
+    }
+    for(let i=0 ;i<items.length;i++){
+      for(let item of items){
+        if (item.id==i){
+          console.log("item and i repeat")
+          break;
+        }
+        if (item.id==items.indexOf(items.length-1)){
+          console.log("given i")
+          id=i;
+        }
+      }
+    }
 
-  //write some callbacks function here
-  addPost(title, content) {
-    const newTitle = title
-    const newContent = content
+
     const newList = this.state.itemList.concat({
-      title: newTitle,
-      content: newContent
+      id:id,
+      title: title,
+      content: content,
+      picture:picture
     })
     this.setState({
       itemList: newList
@@ -92,21 +112,27 @@ class NewPost extends React.Component {
     super(props);
 
     this.submitPost = this.submitPost.bind(this);
-    this.uploadPhoto = this.uploadPhoto.bind(this);
-
+    this.uploadPic = this.uploadPic.bind(this)
   }
+
+  uploadPic(){
+    //section below is for preview
+    const newPic = document.getElementById('pictureBox').files[0]
+    const preview = document.getElementById('preview')
+    preview.src = URL.createObjectURL(newPic)
+    preview.hidden=false;
+  }
+
 
   submitPost() {
-    //save post 
+
+    //save post && call parent function to truly save post's information
     const title = document.getElementById('titleBox').value
     const content = document.getElementById('contentBox').value
+    const picture = document.getElementById('pictureBox').files[0]
 
-    this.props.addPost(title, content);
+    this.props.addPost(title, content,picture);
     this.props.history.push('/')
-  }
-
-  uploadPhoto() {
-    //upload photo here
   }
 
   render() {
@@ -117,8 +143,10 @@ class NewPost extends React.Component {
         <p>Content:</p>
         <textarea id="contentBox" defaultValue="Please input Content." />
         <br />
-        <input id='file-upload' type="file" name="pic" accept="image/*" />
+        <input id='pictureBox' type="file" accept="image/*" onChange={this.uploadPic}/>
         <button id="submitPost" onClick={this.submitPost} >submit</button>
+        <br/>
+        <img id='preview' className='img' hidden={true}/>
       </div>
     )
   }
@@ -134,7 +162,8 @@ class Posts extends React.Component {
   }
 
   render() {
-    const itemList = this.props.itemList.map((item, index) => <Post key={index} title={item.title} content={item.content} />)
+    const itemList = this.props.itemList.map((item) => <Post key={item.id} id={item.id} title={item.title} content={item.content} 
+    picture={item.picture} />)
     
     return (
       <div>
@@ -151,11 +180,22 @@ class Post extends React.Component {
     super(props);
   }
 
+  componentDidMount(){
+    //TODO it didnt recognize wether the picture has been uploaded or not
+    const imgId = this.props.id
+    const reader =new FileReader()
+    reader.readAsDataURL(this.props.picture)
+    reader.onload = function(e) {
+      // document.getElementById(imgId).src = e.target.result; TODO not activate this line until id set up correctly.
+    }
+  }
+
   render() {
     return (
       <div className='post'>
         <p>{this.props.title}</p>
         <p>{this.props.content}</p>
+        <img id={this.props.id} className='img' />
       </div>
     )
   }
