@@ -51,10 +51,9 @@ class App extends React.Component {
   }
 
   render() {
-  
     return (
       <div className="App">
-        <BrowserRouter basename={process.env.public_url}>
+        <BrowserRouter basename='/post_page/'>
           <Route exact path="/" render={(props) => <IndexPage {...props} removePost={this.removePost} itemList={this.state.itemList} />} />
           <Route path="/add_post" render={(props) => <NewPost {...props} addPost={this.addPost} />} />
         </BrowserRouter>
