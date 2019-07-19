@@ -49,7 +49,7 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.itemList)
+  
     return (
       <div className="App">
         <BrowserRouter>
@@ -97,14 +97,23 @@ class NewPost extends React.Component {
 
     this.submitPost = this.submitPost.bind(this);
     this.uploadPic = this.uploadPic.bind(this)
+    this.uploadClick = this.uploadClick.bind(this)
+
+  }
+
+  uploadClick(){
+    const newPic = document.getElementById('pictureBox')
+    newPic.click()
   }
 
   uploadPic() {
     //section below is for preview
     const newPic = document.getElementById('pictureBox').files[0]
-    const preview = document.getElementById('preview')
-    preview.src = URL.createObjectURL(newPic)
-    preview.hidden = false;
+    const previewImg = document.getElementById('previewImg')
+    const previewP = document.getElementById('previewP')
+    previewImg.src = URL.createObjectURL(newPic)
+    previewImg.hidden = false;
+    previewP.hidden = false;
   }
 
 
@@ -123,14 +132,17 @@ class NewPost extends React.Component {
     return (
       <div>
         <p>Title:</p>
-        <input type="text" id="titleBox" />
+        <input className='textBox' type="text" id="titleBox" maxLength={10} />
         <p>Content:</p>
-        <textarea id="contentBox" defaultValue="Please input Content." />
+        <textarea className='textareaBox' id="contentBox" defaultValue="Please input Content." />
         <br />
-        <input id='pictureBox' type="file" accept="image/*" onChange={this.uploadPic} />
+        <p id='previewP' hidden={true}>Preview:</p>
+        <img id='previewImg' className='img' hidden={true} />
+        <br />
+        <input id='pictureBox' type="file" accept="image/*" onChange={this.uploadPic} hidden={true}/>
+        <button id='pictureBtn' onClick={this.uploadClick}>upload</button>
         <button id="submitPost" onClick={this.submitPost} >submit</button>
-        <br />
-        <img id='preview' className='img' hidden={true} />
+        <br/>
       </div>
     )
   }
