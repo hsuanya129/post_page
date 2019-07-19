@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter, Route, Link, history, Redirect } from 'react-router-dom'
+import { HashRouter, Route, Link, history, Redirect } from 'react-router-dom'
 
 
 // parent component
@@ -52,10 +52,10 @@ class App extends React.Component {
   
     return (
       <div className="App">
-        <BrowserRouter>
+        <HashRouter>
           <Route exact path="/" render={(props) => <IndexPage {...props} removePost={this.removePost} itemList={this.state.itemList} />} />
           <Route path="/add_post" render={(props) => <NewPost {...props} addPost={this.addPost} />} />
-        </BrowserRouter>
+        </HashRouter>
       </div>
     )
   }
