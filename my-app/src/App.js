@@ -1,9 +1,10 @@
 import React from 'react';
 import './App.css';
-import { HashRouter, Route, Link, history, Redirect } from 'react-router-dom'
+import { BrowserRouter, Route, Link, history, Redirect } from 'react-router-dom';
 
 
-// parent component
+
+// parent, root component, where the truth data saves
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -35,6 +36,7 @@ class App extends React.Component {
       content: content,
       picture: picture
     })
+
     this.setState({
       itemList: newList
     })
@@ -52,10 +54,10 @@ class App extends React.Component {
   
     return (
       <div className="App">
-        <HashRouter>
+        <BrowserRouter basename={process.env.public_url}>
           <Route exact path="/" render={(props) => <IndexPage {...props} removePost={this.removePost} itemList={this.state.itemList} />} />
           <Route path="/add_post" render={(props) => <NewPost {...props} addPost={this.addPost} />} />
-        </HashRouter>
+        </BrowserRouter>
       </div>
     )
   }
