@@ -7,9 +7,11 @@
   border-style: dashed;
   border-color: cadetblue;
   align-self: center;
+  padding: 20px;
   margin: 5px;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: 10%;
+  margin-right: 10%;
+  word-break: break-all;
 }
 
 .img {
@@ -17,12 +19,7 @@
   height: 100px;
 }
 
-.textBox{
-  width: 15%;
-}
-
 .textareaBox{
-  width: 20%;
   height: 100px;
 }
 
