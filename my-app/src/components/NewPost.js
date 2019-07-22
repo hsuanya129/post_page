@@ -39,7 +39,7 @@ class NewPost extends React.Component {
       return (
         <div>
           <p>Title:</p>
-          <input ref={this.title} className='textBox' type="text"  maxLength={10} />
+          <input ref={this.title} type="text"  maxLength={10} />
           <p>Content:</p>
           <textarea ref={this.content} className='textareaBox' defaultValue="Please input Content." />
           <br />
