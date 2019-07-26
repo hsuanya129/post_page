@@ -23,7 +23,7 @@ class NewPost extends React.Component {
 
     //section below is for image previewing
     uploadPic = () => {
-      const newPic = this.picture.current.files[0]
+      const newPic = this.picture.current.files[0];
       this.previewImg.current.src = URL.createObjectURL(newPic);
       this.previewImg.current.hidden = false;
       this.previewP.current.hidden = false;

@@ -10,7 +10,7 @@ class Posts extends React.Component {
   
     render() {
       const itemList = this.props.itemList.map((item) => <Post key={item.id} id={item.id} title={item.title} content={item.content}
-        picture={item.picture} />)
+        picture={item.picture} />);
   
       return (
         <div>

@@ -28,26 +28,26 @@ class App extends React.Component {
   addPost = (title, content, picture) => {
 
     let id;
-    id = Date.now()
+    id = Date.now();
 
     const newList = this.state.itemList.concat({
-      id: id,
-      title: title,
-      content: content,
-      picture: picture
-    })
+      id,
+      title,
+      content,
+      picture
+    });
 
     this.setState({
       itemList: newList
-    })
+    });
   }
 
   removePost = () => {
-    const postLength = this.state.itemList.length
-    const newList = this.state.itemList.splice(0, postLength - 1)
+    const postLength = this.state.itemList.length;
+    const newList = this.state.itemList.splice(0, postLength - 1);
     this.setState({
       itemList: newList
-    })
+    });
   }
 
   render() {

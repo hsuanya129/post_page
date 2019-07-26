@@ -9,11 +9,11 @@ class IndexPage extends React.Component {
     }
   
     toPostPage =()=> {
-      this.props.history.push('/add_post')
+      this.props.history.push('/add_post');
     }
   
     toRemovePost=()=> {
-      this.props.removePost()
+      this.props.removePost();
     }
   
     render() {
